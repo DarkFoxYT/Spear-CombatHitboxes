@@ -1,0 +1,7 @@
+{
+  "required": true,
+  "package": "net.dark.darks_pvp_optimiser.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": ["PlayerTargetAccessor", "HitboxRendererMixin"],
+  "injectors": {"defaultRequire": 1}
+}
