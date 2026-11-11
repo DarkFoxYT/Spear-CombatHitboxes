@@ -1,0 +1,16 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="All-Rights-Reserved"
+[[mods]]
+modId="darks_pvp_optimiser"
+version="${version}"
+displayName="Spear+CombatHitboxes"
+iconFile="assets/darks_pvp_optimiser/icon.png"
+description="Customizable melee and spear-range hitboxes, with an optional spear targeting-margin overlay."
+[[mixins]]
+config="darks_pvp_optimiser.mixins.json"
+[[dependencies.darks_pvp_optimiser]]
+modId="minecraft"
+type="required"
+versionRange="[${minecraft_version}]"
+side="CLIENT"

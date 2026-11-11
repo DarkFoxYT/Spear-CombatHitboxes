@@ -1,0 +1,22 @@
+allprojects { p ->
+    p.afterEvaluate {
+        if (p.findProperty('modLoader') == 'neoforge') return
+        def mc = p.minecraft_version
+        def legacy = mc == '1.21.11'
+        def variant = p.findProperty('verifyVariant') ?: 'standalone'
+        def api = ['1.21.11':'0.141.6+1.21.11','26.1':'0.155.3+26.1.2','26.1.1':'0.155.3+26.1.2','26.1.2':'0.155.3+26.1.2','26.2':'0.161.0+26.2','26.3':'0.160.7+26.3'][mc]
+        def cloth = ['1.21.11':'21.11.153','26.1':'26.1.154','26.1.1':'26.1.154','26.1.2':'26.1.154','26.2':'26.2.155','26.3':'26.3.159'][mc]
+        def menu = ['1.21.11':'17.0.1','26.1':'18.0.2','26.1.1':'18.0.2','26.1.2':'18.0.2','26.2':'20.0.3','26.3':'21.0.0'][mc]
+        def impl = legacy ? 'modImplementation' : 'implementation'
+        p.dependencies.add(impl, "net.fabricmc.fabric-api:fabric-api:${api}")
+        p.dependencies.add(impl, "me.shedaniel.cloth:cloth-config-fabric:${cloth}")
+        p.dependencies.add(impl, "com.terraformersmc:modmenu:${menu}")
+        if (variant != 'standalone') p.dependencies.add(impl, p.files("build/verification/mods/${variant}-${mc}.jar"))
+        p.sourceSets.main.java.srcDir('verification/java')
+        p.dependencies.add('runtimeOnly', p.files('build/verification/harness.jar'))
+        p.loom.runs.client.runDir("build/verification/run-${mc}-${variant}")
+        p.loom.runs.client.vmArg('-Dfabric.client.gametest')
+        p.loom.runs.client.vmArg('-Dfabric.noGui=true')
+        p.loom.runs.client.vmArg('-Dmixin.debug.export=true')
+    }
+}

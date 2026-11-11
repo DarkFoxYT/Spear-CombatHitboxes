@@ -1,0 +1,17 @@
+allprojects { p ->
+    p.afterEvaluate {
+        def mc = p.minecraft_version
+        def cloth = ['1.21.11':'21.11.153','26.1':'26.1.154','26.1.1':'26.1.154','26.1.2':'26.1.154','26.2':'26.2.155','26.3':'26.3.159'][mc]
+        p.dependencies.add('runtimeOnly', "me.shedaniel.cloth:cloth-config-neoforge:${cloth}")
+        p.sourceSets.main.java.srcDir('verification/neoforge')
+        p.tasks.named('processResources') {
+            doLast {
+                def metadata = p.layout.buildDirectory.file('resources/main/META-INF/neoforge.mods.toml').get().asFile
+                metadata.append('\n[[mods]]\nmodId="spear_verification"\nversion="1"\ndisplayName="Verification"\n')
+            }
+        }
+        p.neoForge.runs.client.programArgument('--quickPlaySingleplayer')
+        p.neoForge.runs.client.programArgument('Verification')
+    }
+}
+

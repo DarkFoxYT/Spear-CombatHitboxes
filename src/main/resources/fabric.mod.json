@@ -3,14 +3,16 @@
   "id": "darks_pvp_optimiser",
   "version": "${version}",
   "name": "Spear+CombatHitboxes",
-  "description": "Highlights your target at melee and spear reach when a spear is in your hotbar.",
+  "description": "Customizable melee and spear-range hitboxes, with an optional spear targeting-margin overlay.",
+  "icon": "assets/darks_pvp_optimiser/icon.png",
   "license": "All-Rights-Reserved",
   "environment": "client",
+  "entrypoints": {"modmenu": ["net.dark.darks_pvp_optimiser.client.SpearModMenu"]},
   "mixins": ["darks_pvp_optimiser.mixins.json"],
   "depends": {
     "fabricloader": ">=${loader_version}",
     "minecraft": "${minecraft_version}",
-    "java": ">=21"
+    "java": ">=${java_version}"
   },
-  "suggests": {"combat-hitboxes": "1.0.10"}
+  "suggests": {"combat-hitboxes": "*", "cloth-config": "*", "modmenu": "*"}
 }

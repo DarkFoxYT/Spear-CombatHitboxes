@@ -1,0 +1,1 @@
+{"schemaVersion":1,"id":"spear_verification","version":"1","entrypoints":{"fabric-client-gametest":["smoke.RangeTest"]},"mixins":["spear-verification.mixins.json"]}

@@ -1,25 +1,74 @@
 plugins {
-    id 'fabric-loom' version '1.17.21'
+    id 'net.fabricmc.fabric-loom' version '1.17.21' apply false
+    id 'net.neoforged.moddev' version '2.0.148' apply false
 }
-
+def targetLoader = providers.gradleProperty('modLoader').getOrElse('fabric')
+def mc = project.minecraft_version
+def legacy = mc == '1.21.11'
+def javaTarget = legacy ? 21 : 25
+def profiles = [
+    '1.21.11': [cloth: '21.11.153', menu: '17.0.1', neo: '21.11.48'],
+    '26.1':    [cloth: '26.1.154', menu: '18.0.2', neo: '26.1.0.19-beta'],
+    '26.1.1':  [cloth: '26.1.154', menu: '18.0.2', neo: '26.1.1.15-beta'],
+    '26.1.2':  [cloth: '26.1.154', menu: '18.0.2', neo: '26.1.2.125'],
+    '26.2':    [cloth: '26.2.155', menu: '20.0.3', neo: '26.2.0.93'],
+    '26.3':    [cloth: '26.3.159', menu: '21.0.0', neo: '26.3.0.101']
+]
+if (!profiles.containsKey(mc)) throw new GradleException("Unsupported Minecraft version: " + mc)
+def profile = profiles[mc]
+if (targetLoader == 'fabric') {
+    apply plugin: legacy ? 'fabric-loom' : 'net.fabricmc.fabric-loom'
+} else if (targetLoader == 'neoforge') {
+    apply plugin: 'net.neoforged.moddev'
+} else {
+    throw new GradleException("Unsupported loader: " + targetLoader)
+}
 version = project.mod_version
 group = project.maven_group
-base { archivesName = project.archives_base_name }
+base { archivesName = "Spear+CombatHitboxes-${mc}-${targetLoader}" }
+layout.buildDirectory = file("build/${mc}-${targetLoader}")
 
-dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+repositories {
+    maven { url = 'https://maven.shedaniel.me/' }
+    maven { url = 'https://maven.terraformersmc.com/releases/' }
+    maven { url = 'https://maven.neoforged.net/releases/' }
 }
-
-processResources {
-    inputs.properties(version: project.version, minecraft_version: project.minecraft_version, loader_version: project.loader_version)
-    filesMatching("fabric.mod.json") { expand inputs.properties }
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(javaTarget)
+    withSourcesJar()
 }
-
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    options.release = 21
+    options.release = javaTarget
 }
-java { withSourcesJar() }
+
+if (targetLoader == 'fabric') {
+    dependencies {
+        minecraft "com.mojang:minecraft:${mc}"
+        if (legacy) mappings loom.officialMojangMappings()
+        add(legacy ? 'modImplementation' : 'implementation', "net.fabricmc:fabric-loader:${project.loader_version}")
+        add(legacy ? 'modCompileOnly' : 'compileOnly', "me.shedaniel.cloth:cloth-config-fabric:${profile.cloth}")
+        add(legacy ? 'modCompileOnly' : 'compileOnly', "com.terraformersmc:modmenu:${profile.menu}")
+    }
+    sourceSets.main.java.exclude '**/SpearNeoForge.java'
+    sourceSets.main.resources.exclude 'META-INF/neoforge.mods.toml'
+} else {
+    neoForge {
+        version = profile.neo
+        runs {
+            client { client(); gameDirectory = file("build/run-${mc}-neoforge") }
+        }
+        mods { darks_pvp_optimiser { sourceSet(sourceSets.main) } }
+    }
+    dependencies {
+        compileOnly "me.shedaniel.cloth:cloth-config-neoforge:${profile.cloth}"
+        implementation 'io.github.llamalad7:mixinextras-neoforge:0.5.0'
+    }
+    sourceSets.main.java.exclude '**/SpearModMenu.java'
+    sourceSets.main.resources.exclude 'fabric.mod.json'
+}
+processResources {
+    inputs.properties(version: project.version, minecraft_version: mc, loader_version: project.loader_version, java_version: javaTarget)
+    filesMatching(['fabric.mod.json', 'META-INF/neoforge.mods.toml']) { expand inputs.properties }
+}
 jar { from('LICENSE.txt') }
