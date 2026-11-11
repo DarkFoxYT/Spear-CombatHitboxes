@@ -15,4 +15,3 @@ abstract class CaptureMixin {
         DrawCapture.boxes.add(new DrawCapture.Box(box, style));
     }
 }
-

@@ -77,6 +77,3 @@ public class RangeTest implements FabricClientGameTest {
         System.out.println("PASSED: " + label);
     }
 }
-
-
-

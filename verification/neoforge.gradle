@@ -14,4 +14,3 @@ allprojects { p ->
         p.neoForge.runs.client.programArgument('Verification')
     }
 }
-
