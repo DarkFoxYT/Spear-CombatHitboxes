@@ -22,3 +22,5 @@ See when your target is within spear reach. A client-side mod that works on its 
 - **Fabric and NeoForge support.** For Minecraft versions with vanilla spears.
 
 Highlights show reach; they do not change your attacks or guarantee a hit.
+
+Ps: i didn't make Combat Hitboxes, this is just a simple extention but it works standalone.
