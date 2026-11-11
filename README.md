@@ -2,6 +2,12 @@
 
 ![Spear+CombatHitboxes icon](src/main/resources/assets/darks_pvp_optimiser/icon.png)
 
+[![Download on Modrinth](https://img.shields.io/badge/Modrinth-Download-00AF5C?style=for-the-badge&logo=modrinth&logoColor=white)](https://modrinth.com/mod/spear-plus-combat-hitboxes)
+[![Fabric](https://img.shields.io/badge/Fabric-DBB99C?style=for-the-badge)](https://modrinth.com/mod/spear-plus-combat-hitboxes/versions?l=fabric)
+[![NeoForge](https://img.shields.io/badge/NeoForge-F16436?style=for-the-badge)](https://modrinth.com/mod/spear-plus-combat-hitboxes/versions?l=neoforge)
+[![GitHub source](https://img.shields.io/badge/GitHub-Source-181717?style=for-the-badge&logo=github)](https://github.com/DarkFoxYT/Spear_CombatHitboxes)
+[![Report an issue](https://img.shields.io/badge/GitHub-Issues-DA5B0B?style=for-the-badge&logo=github)](https://github.com/DarkFoxYT/Spear_CombatHitboxes/issues)
+
 See when your target is within spear reach. A client-side mod that works on its own or alongside Combat Hitboxes and Combat Hitboxes+.
 
 **[Download on Modrinth](https://modrinth.com/mod/spear-plus-combat-hitboxes)**
